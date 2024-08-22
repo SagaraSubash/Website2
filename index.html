@@ -3,170 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TV Channels</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        .tabs {
-            display: flex;
-            justify-content: flex-start;
-            overflow-x: auto;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            scrollbar-width: thin;
-        }
-        .tabs::-webkit-scrollbar {
-            height: 8px;
-        }
-        .tabs::-webkit-scrollbar-thumb {
-            background-color: #e91e63;
-            border-radius: 4px;
-        }
-        .tab {
-            margin: 0 10px;
-            font-size: 18px;
-            padding: 10px 20px;
-            border-bottom: 2px solid transparent;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        .tab.active {
-            border-bottom: 2px solid #e91e63;
-            font-weight: bold;
-        }
-        .channels {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 20px;
-        }
-        .channel {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            padding: 20px;
-            transition: transform 0.3s ease;
-        }
-        .channel:hover {
-            transform: scale(1.05);
-        }
-        .channel img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-        }
-        .channel p {
-            margin: 10px 0 0;
-            font-size: 16px;
-            font-weight: bold;
-        }
-    </style>
+    <title>Loading...</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>List of Channels</h1>
-            <p>Select a category to see the available channels under it</p>
+    <div class="loading-container">
+        <div class="loader">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
         </div>
-        <div class="tabs">
-            <div id="all-tab" class="tab active" onclick="showChannels('all')">All Channels</div>
-            <div class="tab" onclick="showChannels('hindi')">Hindi</div>
-            <div class="tab" onclick="showChannels('sinhala')">Sinhala</div>
-            <div class="tab" onclick="showChannels('kids')">Kids</div>
-            <div class="tab" onclick="showChannels('movies')">Movies</div>
-        </div>
-        <div id="channel-list" class="channels">
-            <!-- Channels will be displayed here -->
-        </div>
+        <p>Loading, please wait...</p>
     </div>
-
-    <script>
-        // Data for channels
-        const channels = {
-            all: [
-                {name: 'Sony Set', img: 'https://upload.wikimedia.org/wikipedia/en/1/13/Sony_Entertainment_Television_logo.jpg'},
-                {name: 'Star Bharat', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Star_Bharat_logo.svg/1200px-Star_Bharat_logo.svg.png'},
-                {name: 'Star Gold Romance', img: 'https://upload.wikimedia.org/wikipedia/en/5/5d/Star_Gold_Romance.jpg'},
-                {name: 'Zee Cinema', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Zee_Cinema_Logo.svg/1024px-Zee_Cinema_Logo.svg.png'},
-                {name: 'Star Plus', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/StarPlus.svg/1200px-StarPlus.svg.png'},
-                {name: 'SET Max', img: 'https://upload.wikimedia.org/wikipedia/en/5/54/Sony_Max_logo.jpg'},
-                {name: 'Colors', img: 'https://upload.wikimedia.org/wikipedia/en/7/7c/Colors_TV.svg'},
-                {name: 'B4U Movies', img: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/98/B4U_Movies_logo.png/1200px-B4U_Movies_logo.png'},
-                {name: 'Star Life', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Star_Life_logo.svg/1200px-Star_Life_logo.svg.png'}
-            ],
-            hindi: [
-                {name: 'Sony Set', img: 'https://upload.wikimedia.org/wikipedia/en/1/13/Sony_Entertainment_Television_logo.jpg'},
-                {name: 'Star Bharat', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Star_Bharat_logo.svg/1200px-Star_Bharat_logo.svg.png'},
-                {name: 'Colors', img: 'https://upload.wikimedia.org/wikipedia/en/7/7c/Colors_TV.svg'}
-            ],
-            sinhala: [
-                {name: 'Sirasa TV', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Sirasa_TV_Logo.png/1200px-Sirasa_TV_Logo.png'},
-                {name: 'Swarnavahini', img: 'https://upload.wikimedia.org/wikipedia/en/8/8c/Swarnavahini_logo.png'}
-            ],
-            kids: [
-                {name: 'Cartoon Network', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Cartoon_Network_2010_logo.svg/1024px-Cartoon_Network_2010_logo.svg.png'},
-                {name: 'Disney Channel', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Disney_Channel_logo.svg/1200px-Disney_Channel_logo.svg.png'}
-            ],
-            movies: [
-                {name: 'Zee Cinema', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Zee_Cinema_Logo.svg/1024px-Zee_Cinema_Logo.svg.png'},
-                {name: 'B4U Movies', img: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/98/B4U_Movies_logo.png/1200px-B4U_Movies_logo.png'},
-                {name: 'SET Max', img: 'https://upload.wikimedia.org/wikipedia/en/5/54/Sony_Max_logo.jpg'}
-            ]
-        };
-
-        // Function to display channels based on category
-        function showChannels(category) {
-            // Remove 'active' class from all tabs
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-
-            // Add 'active' class to the clicked tab
-            if (event) {
-                event.target.classList.add('active');
-            } else {
-                document.getElementById('all-tab').classList.add('active');
-            }
-
-            // Get the list of channels for the selected category
-            const selectedChannels = channels[category];
-
-            // Clear the current channel list
-            const channelList = document.getElementById('channel-list');
-            channelList.innerHTML = '';
-
-            // Populate the channel list with the selected channels
-            selectedChannels.forEach(channel => {
-                const channelElement = document.createElement('div');
-                channelElement.classList.add('channel');
-                channelElement.innerHTML = `
-                    <img src="${channel.img}" alt="${channel.name}">
-                    <p>${channel.name}</p>
-                `;
-                channelList.appendChild(channelElement);
-            });
-        }
-
-        // Show all channels by default when the page loads
-        showChannels('all');
-    </script>
-</body>
-</html>
 </body>
 </html>
