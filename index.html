@@ -3,108 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scan QR</title>
+    <title>TV Channels</title>
     <style>
         body {
-            background-color: #111;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
             font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             margin: 0;
+            padding: 0;
         }
-        .qr-container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 12px;
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .tabs {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+            justify-content: flex-start;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            scrollbar-width: thin;
         }
-        .qr-code img {
-            width: 300px;
-            height: 300px;
+        .tabs::-webkit-scrollbar {
+            height: 8px;
         }
-        #countdown {
-            margin-top: 20px;
+        .tabs::-webkit-scrollbar-thumb {
+            background-color: #e91e63;
+            border-radius: 4px;
+        }
+        .tab {
+            margin: 0 10px;
             font-size: 18px;
-            color: gray;
-        }
-        #progress-bar {
-            width: 100%;
-            height: 5px;
-            background-color: #333;
-            margin-top: 10px;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        #progress {
-            height: 100%;
-            background-color: #00bfa5;
-            width: 100%;
-            transition: width 1s linear;
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 16px;
-            color: #00bfa5;
+            padding: 10px 20px;
+            border-bottom: 2px solid transparent;
             cursor: pointer;
+            white-space: nowrap;
+        }
+        .tab.active {
+            border-bottom: 2px solid #e91e63;
+            font-weight: bold;
+        }
+        .channels {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+        }
+        .channel {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+        .channel:hover {
+            transform: scale(1.05);
+        }
+        .channel img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        .channel p {
+            margin: 10px 0 0;
+            font-size: 16px;
+            font-weight: bold;
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
-    <script>
-        function generateQRCode() {
-            const qrDiv = document.getElementById('qr-code');
-            qrDiv.innerHTML = ''; // Clear the current QR code
-            const qr = qrcode(0, 'L');
-            qr.addData(Math.random().toString(36).substring(2)); // Generate random data
-            qr.make();
-            qrDiv.innerHTML = qr.createImgTag(10); // Medium QR code
-        }
-
-        function startTimer() {
-            let timeLeft = 30;
-            const countdown = document.getElementById('countdown');
-            const progress = document.getElementById('progress');
-
-            const timerInterval = setInterval(() => {
-                timeLeft--;
-                countdown.textContent = `QR Code will expire in ${timeLeft} seconds`;
-
-                // Update the progress bar
-                const progressWidth = (timeLeft / 30) * 100;
-                progress.style.width = progressWidth + '%';
-
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    generateQRCode(); // Generate a new QR code after 30 seconds
-                    startTimer(); // Restart the timer
-                }
-            }, 1000);
-        }
-
-        window.onload = function () {
-            generateQRCode();
-            startTimer();
-        }
-
-        function redirectToGitHub() {
-            window.location.href = "https://github.com";
-        }
-    </script>
 </head>
 <body>
-    <div class="qr-container">
-        <div id="qr-code" class="qr-code"></div>
-        <div id="progress-bar">
-            <div id="progress"></div>
+    <div class="container">
+        <div class="header">
+            <h1>List of Channels</h1>
+            <p>Select a category to see the available channels under it</p>
+        </div>
+        <div class="tabs">
+            <div id="all-tab" class="tab active" onclick="showChannels('all')">All Channels</div>
+            <div class="tab" onclick="showChannels('hindi')">Hindi</div>
+            <div class="tab" onclick="showChannels('sinhala')">Sinhala</div>
+            <div class="tab" onclick="showChannels('kids')">Kids</div>
+            <div class="tab" onclick="showChannels('movies')">Movies</div>
+        </div>
+        <div id="channel-list" class="channels">
+            <!-- Channels will be displayed here -->
         </div>
     </div>
-    <div id="countdown">QR Code will expire in 30 seconds</div>
-    <footer onclick="redirectToGitHub()">If the QR code does not work, use the pair code</footer>
+
+    <script>
+        // Data for channels
+        const channels = {
+            all: [
+                {name: 'Sony Set', img: 'https://upload.wikimedia.org/wikipedia/en/1/13/Sony_Entertainment_Television_logo.jpg'},
+                {name: 'Star Bharat', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Star_Bharat_logo.svg/1200px-Star_Bharat_logo.svg.png'},
+                {name: 'Star Gold Romance', img: 'https://upload.wikimedia.org/wikipedia/en/5/5d/Star_Gold_Romance.jpg'},
+                {name: 'Zee Cinema', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Zee_Cinema_Logo.svg/1024px-Zee_Cinema_Logo.svg.png'},
+                {name: 'Star Plus', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/StarPlus.svg/1200px-StarPlus.svg.png'},
+                {name: 'SET Max', img: 'https://upload.wikimedia.org/wikipedia/en/5/54/Sony_Max_logo.jpg'},
+                {name: 'Colors', img: 'https://upload.wikimedia.org/wikipedia/en/7/7c/Colors_TV.svg'},
+                {name: 'B4U Movies', img: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/98/B4U_Movies_logo.png/1200px-B4U_Movies_logo.png'},
+                {name: 'Star Life', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Star_Life_logo.svg/1200px-Star_Life_logo.svg.png'}
+            ],
+            hindi: [
+                {name: 'Sony Set', img: 'https://upload.wikimedia.org/wikipedia/en/1/13/Sony_Entertainment_Television_logo.jpg'},
+                {name: 'Star Bharat', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Star_Bharat_logo.svg/1200px-Star_Bharat_logo.svg.png'},
+                {name: 'Colors', img: 'https://upload.wikimedia.org/wikipedia/en/7/7c/Colors_TV.svg'}
+            ],
+            sinhala: [
+                {name: 'Sirasa TV', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Sirasa_TV_Logo.png/1200px-Sirasa_TV_Logo.png'},
+                {name: 'Swarnavahini', img: 'https://upload.wikimedia.org/wikipedia/en/8/8c/Swarnavahini_logo.png'}
+            ],
+            kids: [
+                {name: 'Cartoon Network', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Cartoon_Network_2010_logo.svg/1024px-Cartoon_Network_2010_logo.svg.png'},
+                {name: 'Disney Channel', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Disney_Channel_logo.svg/1200px-Disney_Channel_logo.svg.png'}
+            ],
+            movies: [
+                {name: 'Zee Cinema', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Zee_Cinema_Logo.svg/1024px-Zee_Cinema_Logo.svg.png'},
+                {name: 'B4U Movies', img: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/98/B4U_Movies_logo.png/1200px-B4U_Movies_logo.png'},
+                {name: 'SET Max', img: 'https://upload.wikimedia.org/wikipedia/en/5/54/Sony_Max_logo.jpg'}
+            ]
+        };
+
+        // Function to display channels based on category
+        function showChannels(category) {
+            // Remove 'active' class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+
+            // Add 'active' class to the clicked tab
+            if (event) {
+                event.target.classList.add('active');
+            } else {
+                document.getElementById('all-tab').classList.add('active');
+            }
+
+            // Get the list of channels for the selected category
+            const selectedChannels = channels[category];
+
+            // Clear the current channel list
+            const channelList = document.getElementById('channel-list');
+            channelList.innerHTML = '';
+
+            // Populate the channel list with the selected channels
+            selectedChannels.forEach(channel => {
+                const channelElement = document.createElement('div');
+                channelElement.classList.add('channel');
+                channelElement.innerHTML = `
+                    <img src="${channel.img}" alt="${channel.name}">
+                    <p>${channel.name}</p>
+                `;
+                channelList.appendChild(channelElement);
+            });
+        }
+
+        // Show all channels by default when the page loads
+        showChannels('all');
+    </script>
+</body>
+</html>
 </body>
 </html>
